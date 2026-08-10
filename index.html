@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Letter For You</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Lora:ital,wght@0,400..600;1,400..600&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #fcf6f5;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --primary-pink: #e8a5b8;
+      --accent-tulip: #d97792;
+      --text-color: #4a3e3d;
+      --text-muted: #7d6b6d;
+      --shadow: 0 10px 30px rgba(217, 119, 146, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fdfbfb 0%, #f4e3e6 100%);
+      font-family: 'Lora', serif;
+      color: var(--text-color);
+      line-height: 1.8;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Start Overlay (Buka Surat) */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #fdfbfb 0%, #f4e3e6 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .open-btn {
+      background: linear-gradient(135deg, #e8a5b8 0%, #d97792 100%);
+      color: white;
+      border: none;
+      padding: 16px 36px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(217, 119, 146, 0.35);
+      transition: transform 0.3s ease;
+    }
+
+    .open-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Background Animated Petals */
+    .petals-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      background: linear-gradient(135deg, #f1a7b9, #ffccd5);
+      border-radius: 15px 0px 15px 0px;
+      opacity: 0.6;
+      animation: floatPetal linear infinite;
+    }
+
+    @keyframes floatPetal {
+      0% {
+        transform: translateY(-10vh) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      10% { opacity: 0.7; }
+      100% {
+        transform: translateY(105vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Container Card */
+    .container {
+      max-width: 680px;
+      width: 100%;
+      margin: 20px auto;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 24px;
+      padding: 50px 40px;
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 1;
+      display: none;
+    }
+
+    .container.show {
+      display: block;
+      animation: fadeIn 1.2s ease-out;
+    }
+
+    /* Header Tulip Icon */
+    .tulip-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tulip-svg {
+      width: 60px;
+      height: 60px;
+      fill: none;
+      stroke: var(--accent-tulip);
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 4px 6px rgba(217, 119, 146, 0.2));
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    /* Audio Player Section */
+    .audio-container {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 12px;
+      background: rgba(217, 119, 146, 0.08);
+      border-radius: 20px;
+      border: 1px solid rgba(217, 119, 146, 0.2);
+    }
+
+    audio {
+      width: 100%;
+      max-width: 380px;
+      height: 36px;
+      outline: none;
+    }
+
+    /* Text Content */
+    .letter-content p {
+      font-size: 1.05rem;
+      margin-bottom: 24px;
+      color: var(--text-color);
+      letter-spacing: 0.2px;
+    }
+
+    .letter-content p:nth-child(even) {
+      color: var(--text-muted);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20deg); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Closing Section */
+    .closing-section {
+      margin-top: 40px;
+      padding-top: 25px;
+      border-top: 1px dashed rgba(217, 119, 146, 0.3);
+      text-align: center;
+    }
+
+    .closing-section p {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--accent-tulip);
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 30px 20px; }
+      .letter-content p { font-size: 0.98rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hidden Audio Element -->
+  <audio id="bgMusic" loop>
+    <source src="music.flac" type="audio/flac">
+  </audio>
+
+  <!-- Overlay Tombol Pembuka -->
+  <div class="overlay" id="overlay">
+    <button class="open-btn" onclick="openLetter()">🌸 Buka Surat</button>
+  </div>
+
+  <!-- Petals Background -->
+  <div class="petals-container" id="petals"></div>
+
+  <!-- Card Content -->
+  <div class="container" id="mainContainer">
+    <div class="tulip-header">
+      <svg class="tulip-svg" viewBox="0 0 24 24">
+        <path d="M12 2C8 2 6 5.5 6 9c0 3.5 2.5 6 6 6s6-2.5 6-6c0-3.5-2-7-6-7z"/>
+        <path d="M12 2c-1.5 2.5-1.5 5 0 7c1.5-2 1.5-4.5 0-7z"/>
+        <path d="M12 15v7"/>
+        <path d="M12 18c-2 0-4-1-5-3"/>
+        <path d="M12 19c2 0 4-1 5-3"/>
+      </svg>
+    </div>
+
+    <!-- Minimal Audio Control -->
+    <div class="audio-container">
+      <audio id="playerControls" controls loop>
+        <source src="music.flac" type="audio/flac">
+      </audio>
+    </div>
+
+    <div class="letter-content">
+      <p>i don't know if you'll ever see this, but i hope you do. maybe by the time you read this, we're already just two people who used to know each other. and honestly, i don't really know what happened between us, or when things started feeling this distant. i just know that somewhere along the way, we went from talking about almost everything to barely knowing what's going on in each other's lives.</p>
+
+      <p>i'm not writing this because i want anything from you. i don't need an answer, an explanation, or for things to go back to the way they were. i just had some things i never really got to say, and maybe this is the only way i know how to say them.</p>
+
+      <p>lately i've been thinking about us, and honestly, i don't think i need to know exactly what we were anymore. sometimes we were really close, sometimes we barely talked, sometimes everything felt normal, and sometimes it just felt a little different. but i think that's just how things can be between two people who once cared about each other in their own way.</p>
+
+      <p>aku masih peduli sama kamu, obviously. i still like remembering our conversations, the random things you used to tell me, the little things about your day, and all those moments that probably didn't mean much at the time but somehow stayed with me.</p>
+
+      <p>cuma aku nggak mau lagi terlalu jauh membaca sesuatu dari hal-hal kecil. kalau kamu nggak chat, ya mungkin hidup kamu memang lagi berjalan ke arah yang berbeda. kalau kamu lama bales, ya mungkin ada hal lain yang lebih penting buat kamu. dan kalau kita sekarang nggak ngobrol sama sekali, i don't think that automatically makes everything we had meaningless.</p>
+
+      <p>i still care about you, i just don't need to know whether you care about me anymore. bukan karena aku marah, bukan juga karena aku suddenly stopped caring. i just realized that sometimes caring about someone doesn't have to come with expectations.</p>
+
+      <p>aku nggak harus selalu tahu posisi aku di hidup kamu, nggak harus selalu tahu apa yang kamu rasain, dan nggak harus selalu memastikan kalau semuanya masih sama. i can just appreciate whatever we had without trying to turn it into something else.</p>
+
+      <p>maybe we were just friends, maybe we were something that's a little harder to explain. i don't know. but whatever it was, i don't think it needs a label to mean something to me.</p>
+
+      <p>kalau dulu kita ngobrol, i enjoyed it. kalau kamu cerita, i listened. kalau ada hari dimana kita nggak banyak ngobrol, maybe that's just how things were. dan sekarang, kalau ternyata kita memang udah sampai di titik dimana kita nggak saling tahu kabar lagi, then i guess that's okay too.</p>
+
+      <p>aku nggak mau menganggap semuanya sia-sia cuma karena sekarang kita udah sejauh ini. i think people can still care about each other even after becoming strangers. sometimes you don't get to keep the person, you just get to keep the memories, and maybe that's enough.</p>
+
+      <p>and maybe that's the part i've finally understood. aku nggak perlu punya jawaban tentang kamu, tentang kita, atau tentang apa yang sebenarnya pernah ada di antara kita. i can just let it exist the way it did.</p>
+
+      <p>even with all the distance between us, i still hope you're doing okay. i hope life has been kind to you, even on the days when things don't feel that way. i hope you find people who make you happy, people you can talk to without having to question where you stand. i hope you get the things you've always wanted, even if one day i'm no longer someone who gets to hear about them.</p>
+
+      <p>and if you ever wonder whether you meant something to me, you did. more than i probably knew how to say when we were still close.</p>
+
+      <p>because some people don't have to stay in your life forever to leave something behind. some people just become a part of a chapter you don't read anymore, but you still remember how it felt when you were there.</p>
+
+      <p>and you're still someone i care about, even when things between us don't always make sense anymore.</p>
+
+      <p>mungkin kita memang nggak harus jadi apa-apa. maybe we were just something that existed for a while, something real while we had it, and something i'll quietly be grateful for even after it became a memory.</p>
+
+      <p>i don't know if you'll ever read this. but if you do, i hope you know that there was never any hate behind the distance. just two people who somehow ended up growing apart, even while living their own lives from far away.</p>
+
+      <p>and that's okay.</p>
+
+      <div class="closing-section">
+        <p>makasih ya gyt, aku bakal inget kamu</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openLetter() {
+      // Hilangkan overlay & tampilkan konten
+      document.getElementById('overlay').classList.add('hidden');
+      document.getElementById('mainContainer').classList.add('show');
+
+      // Putar musik
+      const music = document.getElementById('bgMusic');
+      music.play().catch(e => console.log("Audio play error: ", e));
+    }
+
+    // Kelopak bunga melayang
+    const container = document.getElementById('petals');
+    for (let i = 0; i < 20; i++) {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      const width = Math.random() * 12 + 10;
+      petal.style.width = `${width}px`;
+      petal.style.height = `${width * 1.5}px`;
+      petal.style.left = `${Math.random() * 100}%`;
+      petal.style.animationDuration = `${Math.random() * 7 + 6}s`;
+      petal.style.animationDelay = `${Math.random() * 5}s`;
+      container.appendChild(petal);
+    }
+  </script>
+</body>
+</html>
