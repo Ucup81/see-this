@@ -48,7 +48,6 @@
       height: 100%;
       background: linear-gradient(135deg, #fdfbfb 0%, #f4e3e6 100%);
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 999;
@@ -131,7 +130,6 @@
       animation: fadeIn 1.2s ease-out;
     }
 
-    /* Header Tulip Icon */
     .tulip-header {
       text-align: center;
       margin-bottom: 20px;
@@ -211,11 +209,6 @@
 </head>
 <body>
 
-  <!-- Hidden Audio Element -->
-  <audio id="bgMusic" loop>
-    <source src="music.flac" type="audio/flac">
-  </audio>
-
   <!-- Overlay Tombol Pembuka -->
   <div class="overlay" id="overlay">
     <button class="open-btn" onclick="openLetter()">🌸 Buka Surat</button>
@@ -236,9 +229,10 @@
       </svg>
     </div>
 
-    <!-- Minimal Audio Control -->
+    <!-- Single Audio Player -->
     <div class="audio-container">
-      <audio id="playerControls" controls loop>
+      <audio id="bgMusic" controls loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
         <source src="music.flac" type="audio/flac">
       </audio>
     </div>
@@ -288,16 +282,13 @@
 
   <script>
     function openLetter() {
-      // Hilangkan overlay & tampilkan konten
       document.getElementById('overlay').classList.add('hidden');
       document.getElementById('mainContainer').classList.add('show');
 
-      // Putar musik
       const music = document.getElementById('bgMusic');
       music.play().catch(e => console.log("Audio play error: ", e));
     }
 
-    // Kelopak bunga melayang
     const container = document.getElementById('petals');
     for (let i = 0; i < 20; i++) {
       const petal = document.createElement('div');
